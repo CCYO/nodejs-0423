@@ -3,7 +3,9 @@ let express = require('express'),
     session = require('express-session'),
     redisStore = require('connect-redis')(session)
 
-let redisClient = require('./db/redis')
+let redisClient = require('./db/redis'),
+    mysqlConnection = require('./db/mysql'),
+    router = require('./router/index.js')
 
 let app = express()
 
@@ -23,22 +25,7 @@ app.use(session({
     store: new redisStore({ client: redisClient})
 }))
 
-app.get('/', (req, res) => {
-    if(req.session.views){
-        console.log('views ++')
-        req.session.views++
-    }else{
-        console.log('views init...')
-        req.session.views = 1
-    }
-    let expireTime = req.session.cookie.maxAge / 1000
-    console.log(`${req.session.id} coming...`)
-    res.render('index', {
-        views: req.session.views,
-        sessionExpireTime: expireTime,
-        sessionOriginMaxAge: req.session.cookie.originalMaxAge
-    })
-})
+app.use('/', router)
 
 app.listen(process.env.PORT || 8080, () => {
     console.log(`listen.......${process.env.PORT}`)
