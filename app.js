@@ -24,10 +24,10 @@ app.use(session({
 }))
 
 app.get('/', (req, res) => {
-    if(!req.session.views){
-        req.session.views = 0
-    }else{
+    if(req.session.views){
         req.session.views++
+    }else{
+        req.session.views = 0
     }
     console.log(`${req.session.id} coming...`)
     res.render('index', {views: req.session.views})
