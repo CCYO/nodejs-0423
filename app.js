@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
         req.session.views++
     }
     console.log(`${req.session.id} coming...`)
-    res.render('index')
+    res.render('index', {views: req.session.views})
 })
 
 app.listen(process.env.PORT || 8080, () => {
