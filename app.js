@@ -14,7 +14,7 @@ app.use(bodyParser.json())
 
 app.use(session({
     secret: 'xxx',
-    resave: true,
+    resave: false,
     saveUninitialized: true,
     cookie: {
         maxAge: 1000 * 60 * 1,
@@ -31,8 +31,13 @@ app.get('/', (req, res) => {
         console.log('views init...')
         req.session.views = 1
     }
+    let expireTime = req.session.cookie.maxAge / 1000
     console.log(`${req.session.id} coming...`)
-    res.render('index', {views: req.session.views})
+    res.render('index', {
+        views: req.session.views,
+        sessionExpireTime: expireTime,
+        sessionOriginMaxAge: req.session.cookie.originalMaxAge
+    })
 })
 
 app.listen(process.env.PORT || 8080, () => {
