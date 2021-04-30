@@ -5,7 +5,9 @@ let express = require('express'),
 
 let redisClient = require('./db/redis')
 
-var app = express()
+let app = express()
+
+app.set('view engine', 'ejs')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
@@ -13,7 +15,7 @@ app.use(bodyParser.json())
 app.use(session({
     secret: 'xxx',
     resave: true,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {
         maxAge: 1000 * 60 * 1,
         httpOnly: true
@@ -21,9 +23,14 @@ app.use(session({
     store: new redisStore({ client: redisClient})
 }))
 
-
 app.get('/', (req, res) => {
-    res.end('OK HELLO, Test')
+    if(!req.session.views){
+        req.session.views = 0
+    }else{
+        req.session.views++
+    }
+    console.log(`${req.session.id} coming...`)
+    res.render('index')
 })
 
 app.listen(process.env.PORT || 8080, () => {
