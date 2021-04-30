@@ -1,10 +1,10 @@
 let mysql = require('mysql')
 
-const mysqlConnection = mysql.createClient({
-    host: '10.140.0.3',
-    user: 'root',
+const mysqlConnection = mysql.createConnection({
+    host: '',
+    user: '',
     password: '',
-    database: 'redis_session_demo'
+    database: ''
 })
 
 mysqlConnection.connect((err) => {
