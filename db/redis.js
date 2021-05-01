@@ -1,6 +1,8 @@
 let redis = require('redis')
 
-let redisClient = redis.createClient()
+const config_db =  require('./config/db')
+
+let redisClient = redis.createClient(config_db.redis)
 
 redisClient.on('error', (err) => {
     console.log(`Redis Error: ${err}`)
