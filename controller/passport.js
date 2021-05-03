@@ -27,7 +27,9 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser( async (email, done) => {
     try{
-        let { results, fields } = await query(`SELECT * FROM users WHERE email = ?`, [email])
+        let { results, fields } = await query(`SELECT * FROM users WHERE email = ?`, email)
+        let user = results[0]
+        done(null, user)
     } catch(err){
         return done(`ERR in PASSPORT of deserialized then query : ${err}`, false)
     }
