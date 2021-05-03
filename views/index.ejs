@@ -22,7 +22,7 @@
     <script>
         $(function(){
             $('#_form').submit( (e) => {
-                e.defaultPrevented()
+                e.preventDefault()
                 $.ajax({
                     method: 'POST',
                     url: '/login',

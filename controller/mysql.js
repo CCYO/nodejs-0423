@@ -9,11 +9,10 @@ const query = (queryStr, ...keywordArr) => {
     })
 }
 
-const searchUser = function(body){
+const searchUser = async (body) => {
     const queryStr = `SELECT * FROM users WHERE email = ?`
     const {email, password} = body
-    return (async () => {
-        try {
+    try {
             let {results, fields} = await query( queryStr, email)
             let user = results[0]
             if(!user) return { msg: '找不到該帳號'}
@@ -22,7 +21,6 @@ const searchUser = function(body){
         }catch(err){
             console.log(`MYSQL ERR: ${err}`)
         }
-    })()
 }
 
 

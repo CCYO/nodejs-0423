@@ -1,6 +1,6 @@
 let redis = require('redis')
 
-const config_db =  require('./config/db')
+const config_db =  require('../config/db')
 
 let redisClient = redis.createClient(config_db.redis)
 

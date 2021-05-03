@@ -19,8 +19,8 @@ router.get('/', (req, res) => {
     })
 })
 
-router.post('/login', (req, res) => {
-    let user = searchUser(req.body)
+router.post('/login', async (req, res) => {
+    let user = await searchUser(req.body)
     res.json(user)
 })
 
