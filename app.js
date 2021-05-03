@@ -7,6 +7,8 @@ let redisClient = require('./db/redis'),
     mysqlConnection = require('./db/mysql'),
     router = require('./router/index.js')
 
+const passport = require('../controller/passport.js')
+
 let app = express()
 
 app.set('view engine', 'ejs')
@@ -24,6 +26,8 @@ app.use(session({
     },
     store: new redisStore({ client: redisClient})
 }))
+
+app.use( passport.initialize() )
 
 app.use('/', router)
 
