@@ -45,6 +45,8 @@ router.post('/register', async (req, res) => {
     res.json(result)
 })
 
-  
+router.get('/cantfind', (req, res) => {
+    return res.send('404')
+})  
 
 module.exports = router

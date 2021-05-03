@@ -34,35 +34,10 @@ app.use('/', router)
 
 app.use( passport.session())
 
-router.post('/login', async (req, res) => {
+router.post('/login', passport.authenticate( { failureRedirect: '/cantfind'}),  (req, res) => {
     //let user = await searchUser(req.body)
     console.log('post login ing.......')
-    passport.authenticate('local', (err, user, info) => {
-        if(err){
-            console.log(err)
-            res.send('404')
-            return
-        }
-        if(info){
-            res.json(info)
-            return
-        }
-        if(!user){
-            res.redirect('/login')
-            return
-        }
-        let expireTime = req.session.cookie.maxAge / 1000
-        res.render('/', {
-            sessionID: req.sessionID,
-            isAuthenticated: req.isAuthenticated(),
-            views: req.session.views,
-            sessionOriginMaxAge: req.session.cookie.originalMaxAge,
-            sessionExpireTime: expireTime,
-            id: req.user.id,
-            email: (req.isAuthenticated() ? req.user.email : null)
-        })
-        return
-    })
+    return res.json(req)
 })
 
 router.get('/', (req, res) => {
