@@ -1,3 +1,5 @@
+const { searchUser } = require('../controller/mysql.js')
+
 let router = require('express').Router()
 
 router.get('/', (req, res) => {
@@ -18,7 +20,8 @@ router.get('/', (req, res) => {
 })
 
 router.post('/login', (req, res) => {
-    
+    let user = searchUser(req.body)
+    res.json(user)
 })
 
 module.exports = router
