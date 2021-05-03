@@ -1,12 +1,14 @@
 let passport = require('passport'),
-    localStrategy = require('passport-local')
+    localStrategy = require('passport-local').Strategy
 
 let { query } = require('./mysql.js')
 
-passport.use( new localStrategy( async (email, password, done) => {
+passport.use( new localStrategy({ usernameField: 'email'}, async (email, password, done) => {
     try {
-        let {results, fields} = await query(`SELECT * FROM users WHERE email = ?`, [email])
+	console.log(`in controller/passport.js ===> email is ${email}`)
+        let {results, fields} = await query(`SELECT * FROM users WHERE email = ?`, email)
         let user = results[0]
+        console.log(`in controller/passport.js ==> user in mysql is `, user)
         if(!user){
             return done(null, false, {msg: '信箱錯誤'})
         }

@@ -34,13 +34,13 @@ app.use('/', router)
 
 app.use( passport.session())
 
-router.post('/login', passport.authenticate( { failureRedirect: '/cantfind'}),  (req, res) => {
+app.post('/login', passport.authenticate('local', { failureRedirect: '/cantfind'}),  (req, res) => {
     //let user = await searchUser(req.body)
     console.log('post login ing.......')
     return res.json(req)
 })
 
-router.get('/', (req, res) => {
+app.get('/', (req, res) => {
     let expireTime = req.session.cookie.maxAge / 1000
     return res.render('/', {
         sessionID: req.sessionID,
