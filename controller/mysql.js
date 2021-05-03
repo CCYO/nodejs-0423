@@ -40,5 +40,5 @@ const searchUser = async (body) => {
 
 
 module.exports = {
-    searchUser
+    searchUser, registerUser
 }
