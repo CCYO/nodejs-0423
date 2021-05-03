@@ -45,38 +45,6 @@ router.post('/register', async (req, res) => {
     res.json(result)
 })
 
-router.post('/login', async (req, res) => {
-    //let user = await searchUser(req.body)
-    passport.authenticate('local', (err, user, info) => {
-        if(err){
-            console.log(err)
-            res.send('404')
-            return
-        }
-        if(info){
-            res.json(info)
-            return
-        }
-        if(!user){
-            res.redirect('/login')
-            return
-        }
-        let expireTime = req.session.cookie.maxAge / 1000
-        res.render('/', {
-            sessionID: req.sessionID,
-            isAuthenticated: req.isAuthenticated(),
-            views: req.session.views,
-            sessionOriginMaxAge: req.session.cookie.originalMaxAge,
-            sessionExpireTime: expireTime,
-            id: req.user.id,
-            email: (req.isAuthenticated() ? req.user.email : null)
-        })
-        return
-    })
-})
-
-router.get('/', (req, res) => {
-    
-})  
+  
 
 module.exports = router

@@ -23,7 +23,7 @@ passport.serializeUser((user, done) => {
     done(null, user.email)
 })
 
-passport.deserializedUser( async (email, done) => {
+passport.deserializeUser( async (email, done) => {
     try{
         let { results, fields } = await query(`SELECT * FROM users WHERE email = ?`, [email])
     } catch(err){
