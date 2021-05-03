@@ -35,7 +35,6 @@ app.use('/', router)
 app.use( passport.session())
 
 app.get('/', (req, res) => {
-    console.log('222222222222222222')
     let expireTime = req.session.cookie.maxAge / 1000
     return res.render('index', {
         sessionID: req.sessionID,
@@ -51,7 +50,7 @@ app.get('/', (req, res) => {
 app.post('/login', passport.authenticate('local', { failureRedirect: '/cantfind'}),  (req, res) => {
     //let user = await searchUser(req.body)
     console.log('post login ing.......')
-    return res.redirect('/')
+    return res.send({ok: 'OK'})
 })
 
 app.listen(process.env.PORT || 8080, () => {

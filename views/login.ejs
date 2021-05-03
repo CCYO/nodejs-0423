@@ -28,8 +28,8 @@
                     url: '/login',
                     data: $('#_form').serialize(),
                     dataType: 'json'
-                }).then( user => {
-                    console.log(user)
+                }).then( ({ok}) => {
+                    if(ok === 'OK') window.location.href = '/'
                 })
             })
         })
