@@ -9,6 +9,20 @@ const query = (queryStr, ...keywordArr) => {
     })
 }
 
+const registerUser = async (body) => {
+    const queryStr = `INSERT INTO users ( email, password ) VALUES ( ?, ? )`
+    const {email, password} = body
+    try {
+            let {results, fields} = await query( queryStr, email, password)
+            // let user = results[0]
+            return { results, fields }
+        }catch(err){
+            console.log(`MYSQL ERR then registerUser: ${err}`)
+        }
+}
+
+
+
 const searchUser = async (body) => {
     const queryStr = `SELECT * FROM users WHERE email = ?`
     const {email, password} = body
@@ -19,7 +33,7 @@ const searchUser = async (body) => {
             if(!(password === user.password)) return {msg: '密碼錯誤'}
             return user
         }catch(err){
-            console.log(`MYSQL ERR: ${err}`)
+            console.log(`MYSQL ERR then searchUSER: ${err}`)
         }
 }
 
