@@ -36,6 +36,7 @@ app.use( passport.session())
 
 router.post('/login', async (req, res) => {
     //let user = await searchUser(req.body)
+    console.log('post login ing.......')
     passport.authenticate('local', (err, user, info) => {
         if(err){
             console.log(err)
