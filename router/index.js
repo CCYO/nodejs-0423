@@ -14,7 +14,7 @@ router.get('/login', (req, res) => {
     }
     let expireTime = req.session.cookie.maxAge / 1000
     console.log(`${req.session.id} coming...`)
-    res.render('/login', {
+    return res.render('/login', {
         sessionID: req.sessionID,
         views: req.session.views,
         sessionExpireTime: expireTime,
