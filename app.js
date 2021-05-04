@@ -36,6 +36,7 @@ app.use( passport.session())
 
 app.get('/', (req, res) => {
     let expireTime = req.session.cookie.maxAge / 1000
+    console.log('REQ USER ===> ', req.user)
     return res.render('index', {
         sessionID: req.sessionID,
         isAuthenticated: req.isAuthenticated(),
@@ -43,7 +44,7 @@ app.get('/', (req, res) => {
         sessionOriginMaxAge: req.session.cookie.originalMaxAge,
         sessionExpireTime: expireTime,
         id: req.user.id,
-        email: (req.isAuthenticated() ? req.user.email : null)
+        email: (req.isAuthenticated() ? req.user.email : null),
     })
 })
 
