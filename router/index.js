@@ -4,6 +4,19 @@ const passport = require('../controller/passport.js')
 
 let router = require('express').Router()
 
+router.get('/index2', (req, res) => {
+    let expireTime = req.session.cookie.maxAge / 1000
+    return res.render('index2', {
+        sessionID: req.sessionID,
+        isAuthenticated: req.isAuthenticated(),
+        views: req.session.views,
+        sessionOriginMaxAge: req.session.cookie.originalMaxAge,
+        sessionExpireTime: expireTime,
+        id: req.user.id,
+        email: (req.isAuthenticated() ? req.user.email : null)
+    })
+})
+
 router.get('/login', (req, res) => {
     if(req.session.views){
         console.log('views ++')

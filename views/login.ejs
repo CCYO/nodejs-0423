@@ -17,19 +17,24 @@
     <form id="_form">
         email: <input type="text" name="email">
         password: <input type="text" name="password">
-        <input type="submit">
+        <input type="submit" data-key='index'>
+        <input type="submit" data-key='index2'>
     </form>
     <script>
         $(function(){
             $('#_form').submit( (e) => {
                 e.preventDefault()
+                console.log(e)
                 $.ajax({
                     method: 'POST',
                     url: '/login',
                     data: $('#_form').serialize(),
                     dataType: 'json'
                 }).then( ({ok}) => {
-                    if(ok === 'OK') window.location.href = '/'
+                    if(ok === 'OK') {
+                        
+
+                    }
                 })
             })
         })
