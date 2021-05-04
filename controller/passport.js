@@ -22,7 +22,8 @@ passport.use( new localStrategy({ usernameField: 'email'}, async (email, passwor
 }))
 
 passport.serializeUser((user, done) => {
-    done(null, user.email)
+    const {id, email} = user
+    done(null, {id, email})
 })
 
 passport.deserializeUser( async (email, done) => {
