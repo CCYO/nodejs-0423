@@ -26,7 +26,7 @@ passport.serializeUser((user, done) => {
     done(null, {id, email})
 })
 
-passport.deserializeUser( async (email, done) => {
+passport.deserializeUser( async ({ id, email}, done) => {
     try{
         let { results, fields } = await query(`SELECT * FROM users WHERE email = ?`, email)
         let user = results[0]
