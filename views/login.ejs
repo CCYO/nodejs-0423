@@ -22,9 +22,10 @@
     </form>
     <script>
         $(function(){
-            $('#_form').submit( (e) => {
+            let key
+            $('input[type="submit"]').click( (e) => {
                 e.preventDefault()
-                console.log(e)
+                key = $(e.target).data('key')
                 $.ajax({
                     method: 'POST',
                     url: '/login',
@@ -32,9 +33,13 @@
                     dataType: 'json'
                 }).then( ({ok}) => {
                     if(ok === 'OK') {
-                        
-
+                        if(key === 'index'){
+                            window.location.href = '/'
+                            return
+                        }
+                        window.location.href = '/index2'
                     }
+                    console.log('GG')
                 })
             })
         })
