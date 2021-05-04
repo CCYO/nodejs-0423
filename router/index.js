@@ -7,6 +7,9 @@ let router = require('express').Router()
 router.get('/index2', (req, res) => {
     let expireTime = req.session.cookie.maxAge / 1000
     console.log('REQ USER ===> ', req.user)
+    console.log('REQ SESSION ===> ', req.session)
+    console.log('REQ SESSION PASSPORT ===> ', req.session.passport)
+    console.log('REQ SESSION PASSPORT USER ===> ', req.session.passport.user)
     return res.render('index2', {
         sessionID: req.sessionID,
         isAuthenticated: req.isAuthenticated(),
