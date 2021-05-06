@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 app.use((req, res, next) => {
-    console.log('進入 app.js，還沒通過 express-session 中間件，此時 req.session 為', req.session)
+    console.log('進入 app.js，還沒通過 express-session 中間件，此時 req.session 為/r/n', req.session)
     next()
 })
 
@@ -32,15 +32,15 @@ app.use(session({
 }))
 
 app.use((req, res, next) => {
-    console.log('進入 app.js，通過 express-session 中間件，此時 req.session 為', req.session)
+    console.log('進入 app.js，通過 express-session 中間件，此時 req.session 為/r/n', req.session)
     next()
 })
 
 app.use( passport.initialize() )
 
 app.use((req, res, next) => {
-    console.log('進入 app.js，通過 passport-initialize 中間件，此時 req.session 為/n', req.session)
-    console.log('req.user 為/n', req.user)
+    console.log('進入 app.js，通過 passport-initialize 中間件，此時 req.session 為/r/n', req.session)
+    console.log('req.user 為/r/n', req.user)
     next()
 })
 
@@ -49,8 +49,8 @@ app.use('/', router)
 app.use( passport.session())
 
 app.use((req, res, next) => {
-    console.log('進入 app.js，通過 passport-session 中間件，此時 req.session 為', req.session)
-    console.log('req.user 為/n', req.user)
+    console.log('進入 app.js，通過 passport-session 中間件，此時 req.session 為/r/n', req.session)
+    console.log('req.user 為/r/n', req.user)
     next()
 })
 
