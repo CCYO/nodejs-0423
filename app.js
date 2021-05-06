@@ -55,6 +55,8 @@ app.use((req, res, next) => {
 })
 
 app.get('/', (req, res) => {
+    console.log('進入 app.js 的 /，此時 req.session 為\n', req.session)
+    console.log('req.user 為\n', req.user)
     let expireTime = req.session.cookie.maxAge / 1000
     return res.render('index', {
         sessionID: req.sessionID,
