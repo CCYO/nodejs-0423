@@ -1,7 +1,5 @@
 const { registerUser, searchUser } = require('../controller/mysql.js')
 
-const passport = require('../controller/passport.js')
-
 let router = require('express').Router()
 
 router.get('/index2', (req, res) => {
