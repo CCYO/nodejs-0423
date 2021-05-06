@@ -1,13 +1,11 @@
 let express = require('express'),
     bodyParser = require('body-parser'),
     session = require('express-session'),
-    redisStore = require('connect-redis')(session),
-    passport = require('passport')
+    redisStore = require('connect-redis')(session)
 
 let redisClient = require('./db/redis'),
-    mysqlConnection = require('./db/mysql'),
-    router = require('./router/index.js')
-
+    router = require('./router/index.js'),
+    passport = require('./controller/passport.js')
 
 
 let app = express()
@@ -16,6 +14,11 @@ app.set('view engine', 'ejs')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
+
+app.use((req, res, next) => {
+    console.log('進入 app.js，還沒通過 express-session 中間件，此時 req.session 為', req.session)
+    next()
+})
 
 app.use(session({
     secret: 'xxx',
@@ -28,18 +31,31 @@ app.use(session({
     store: new redisStore({ client: redisClient})
 }))
 
+app.use((req, res, next) => {
+    console.log('進入 app.js，通過 express-session 中間件，此時 req.session 為', req.session)
+    next()
+})
+
 app.use( passport.initialize() )
+
+app.use((req, res, next) => {
+    console.log('進入 app.js，通過 passport-initialize 中間件，此時 req.session 為', req.session)
+    console.log('進入 app.js，通過 passport-session 中間件，此時 req.user 為', req.session)
+    next()
+})
 
 app.use('/', router)
 
 app.use( passport.session())
 
+app.use((req, res, next) => {
+    console.log('進入 app.js，通過 passport-session 中間件，此時 req.session 為', req.session)
+    console.log('進入 app.js，通過 passport-session 中間件，此時 req.user 為', req.session)
+    next()
+})
+
 app.get('/', (req, res) => {
     let expireTime = req.session.cookie.maxAge / 1000
-    console.log('REQ USER ===> ', req.user)
-    console.log('REQ SESSION ===> ', req.session)
-    console.log('REQ SESSION PASSPORT ===> ', req.session.passport)
-    console.log('REQ SESSION PASSPORT USER ===> ', req.session.passport.user)
     return res.render('index', {
         sessionID: req.sessionID,
         isAuthenticated: req.isAuthenticated(),
@@ -53,7 +69,6 @@ app.get('/', (req, res) => {
 
 app.post('/login', passport.authenticate('local', { failureRedirect: '/cantfind'}),  (req, res) => {
     //let user = await searchUser(req.body)
-    console.log('post login ing.......')
     return res.send({ok: 'OK'})
 })
 
