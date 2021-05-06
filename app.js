@@ -39,8 +39,8 @@ app.use((req, res, next) => {
 app.use( passport.initialize() )
 
 app.use((req, res, next) => {
-    console.log('進入 app.js，通過 passport-initialize 中間件，此時 req.session 為', req.session)
-    console.log('進入 app.js，通過 passport-session 中間件，此時 req.user 為', req.session)
+    console.log('進入 app.js，通過 passport-initialize 中間件，此時 req.session 為/n', req.session)
+    console.log('req.user 為/n', req.user)
     next()
 })
 
@@ -50,7 +50,7 @@ app.use( passport.session())
 
 app.use((req, res, next) => {
     console.log('進入 app.js，通過 passport-session 中間件，此時 req.session 為', req.session)
-    console.log('進入 app.js，通過 passport-session 中間件，此時 req.user 為', req.session)
+    console.log('req.user 為/n', req.user)
     next()
 })
 
