@@ -60,11 +60,9 @@ router.post('/register', async (req, res) => {
 })
 
 router.get('/cantfind', (req, res) => {
-    let error = req.flash('error')
-    console.log('error ===> ', error)
-    let aaa =  error[0] ? error : req.flash('hi')
-    console.log('aaa ===> ', aaa)
-    return res.send('404')
+    return res.render('cantfind', {
+        err: req.flash('error')
+    })
 })  
 
 
