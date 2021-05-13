@@ -60,9 +60,13 @@ router.post('/register', async (req, res) => {
     res.json(result)
 })
 
+router.get('/verifyFail', (req, res) => {
+    res.json({redirect: '/cantfind'})
+})
+
 router.get('/cantfind', (req, res) => {
     return res.render('cantfind', {
-        err: req.flash('error')
+        //err: req.flash('error')
     })
 })  
 
