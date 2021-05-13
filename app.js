@@ -15,8 +15,6 @@ app.set('view engine', 'ejs')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use(flash())
-
 
 app.use((req, res, next) => {
     console.log('進入 app.js，還沒通過 express-session 中間件，此時 req.session 為\n', req.session)
@@ -34,8 +32,12 @@ app.use(session({
     store: new redisStore({ client: redisClient})
 }))
 
+app.use(flash())
+
 app.use((req, res, next) => {
     console.log('進入 app.js，通過 express-session 中間件，此時 req.session 為\n', req.session)
+    req.flash('aaa', 'AAA')
+    req.flash('bbb', {b: 'BBB'})
     next()
 })
 
@@ -44,6 +46,8 @@ app.use( passport.initialize() )
 app.use((req, res, next) => {
     console.log('進入 app.js，通過 passport-initialize 中間件，此時 req.session 為\n', req.session)
     console.log('req.user 為\n', req.user)
+    console.log( 'aaa ===> ', req.flash('aaa'))
+    console.log( 'bbb ===> ', req.flash('bbb'))
     next()
 })
 
