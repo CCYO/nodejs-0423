@@ -4,6 +4,7 @@ let router = require('express').Router()
 
 router.get('/index2', (req, res) => {
     console.log('進入 router/index.js 的 index2，此時 req.session 為\n', req.session)
+    console.log('req.isAuthenticated is', req.isAuthenticated())
     console.log('req.user 為\n', req.user)
     let expireTime = req.session.cookie.maxAge / 1000
     return res.render('index2', {
