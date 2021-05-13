@@ -69,7 +69,7 @@ app.get('/', (req, res) => {
     })
 })
 
-app.post('/login', passport.authenticate('local', { failureRedirect: '/cantfind'}),  (req, res) => {
+app.post('/login', passport.authenticate('local', { failureRedirect: '/cantfind', session: false}),  (req, res) => {
     //let user = await searchUser(req.body)
     return res.send({ok: 'OK'})
 })
