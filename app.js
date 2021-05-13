@@ -71,6 +71,9 @@ app.get('/', (req, res) => {
 
 app.post('/login', passport.authenticate('local', { failureRedirect: '/cantfind', session: false}),  (req, res) => {
     //let user = await searchUser(req.body)
+    console.log('通過驗證策略')
+    console.log('req.user: ', req.user)
+    console.log('req.session: ', req.session)
     return res.send({ok: 'OK'})
 })
 
