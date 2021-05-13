@@ -68,7 +68,8 @@ router.get('/verifyFail', (req, res) => {
 router.get('/cantfind', (req, res) => {
     return res.render('cantfind', {
         err: req.flash('error'),
-        test: ['a', 'b', 'c']
+        testArr: ['a', 'b', 'c'],
+        testObj: {a: 'A', b: 'B'}
     })
 })  
 
