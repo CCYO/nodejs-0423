@@ -12,7 +12,7 @@ passport.use( new localStrategy({ usernameField: 'email'}, async (email, passwor
             return done(null, false, {message: '信箱錯誤'})
         }
         if(!(password === user.password)){
-            return done(null, false, {type: 'errForPwd', message: '密碼錯誤'})
+            return done(null, false, {type: 'hi', message: '密碼錯誤'})
         }
         return done(null, user)
     } catch(err){

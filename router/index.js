@@ -61,7 +61,8 @@ router.post('/register', async (req, res) => {
 
 router.get('/cantfind', (req, res) => {
     let error = req.flash('error')
-    let aaa =  error ? error : req.flash('errForPwd')
+    console.log('error ===> ', error)
+    let aaa =  error[0] ? error : req.flash('hi')
     console.log('aaa ===> ', aaa)
     return res.send('404')
 })  
