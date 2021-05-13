@@ -18,6 +18,7 @@
   "homepage": "https://github.com/CCYO/nodejs-0423#readme",
   "dependencies": {
     "body-parse": "^0.1.0",
+    "connect-flash": "^0.1.1",
     "connect-redis": "^5.2.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
