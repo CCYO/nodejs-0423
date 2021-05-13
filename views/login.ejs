@@ -29,7 +29,7 @@
                 $.ajax({
                     method: 'POST',
                     url: '/login',
-                    data: $('#_form').serialize() + `k=${key}`,
+                    data: $('#_form').serialize() + `&k=${key}`,
                     dataType: 'json'
                 }).then( ({redirect}) => {
                     window.location.href = redirect

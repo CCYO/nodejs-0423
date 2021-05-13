@@ -61,6 +61,7 @@ router.post('/register', async (req, res) => {
 })
 
 router.get('/verifyFail', (req, res) => {
+    console.log('進入 /verifyFail')
     res.json({redirect: '/cantfind'})
 })
 
