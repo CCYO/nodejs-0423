@@ -57,7 +57,7 @@ app.use((req, res, next) => {
     next()
 })
 
-app.get('/', (req, res) => {
+app.get('/index1', (req, res) => {
     console.log('進入 app.js 的 /，此時 req.session 為\n', req.session)
     console.log('req.isAuthenticated is', req.isAuthenticated())
     console.log('req.user 為\n', req.user)
@@ -73,12 +73,13 @@ app.get('/', (req, res) => {
     })
 })
 
-app.post('/login', passport.authenticate('local', { failureRedirect: '/cantfind', failureFlash: true}),  (req, res) => {
+app.post('/login', passport.authenticate('local', { failureFlash: true }),  (req, res) => {
     //let user = await searchUser(req.body)
     console.log('通過驗證策略')
     console.log('req.user: ', req.user)
     console.log('req.session: ', req.session)
-    return res.send({ok: 'OK'})
+    if (req.body.k === 'index1') return res.json({ redirect: '/index1'})
+    if (req.body.k === 'index2') return res.json({ redirect: '/index2'})
 })
 
 app.listen(process.env.PORT || 8080, () => {

@@ -17,7 +17,7 @@
     <form id="_form">
         email: <input type="text" name="email">
         password: <input type="text" name="password">
-        <input type="submit" data-key='index'>
+        <input type="submit" data-key='index1'>
         <input type="submit" data-key='index2'>
     </form>
     <script>
@@ -29,17 +29,10 @@
                 $.ajax({
                     method: 'POST',
                     url: '/login',
-                    data: $('#_form').serialize(),
+                    data: $('#_form').serialize() + `k=${key}`,
                     dataType: 'json'
-                }).then( ({ok}) => {
-                    if(ok === 'OK') {
-                        if(key === 'index'){
-                            window.location.href = '/'
-                            return
-                        }
-                        window.location.href = '/index2'
-                    }
-                    window.location.href = '/cantfind'
+                }).then( ({redirect}) => {
+                    window.location.href = redirect
                 })
             })
         })
