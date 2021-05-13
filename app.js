@@ -49,7 +49,7 @@ app.use((req, res, next) => {
     console.log('req.user 為\n', req.user)
     console.log( 'bbb ===> ', req.flash('bbb'))
     let x = req.flash('ccc')
-    console.log('x is ===> ', x)
+    x.c()
     next()
 })
 
