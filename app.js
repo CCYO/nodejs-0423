@@ -75,7 +75,7 @@ app.get('/index1', (req, res) => {
 
 //app.post('/login', passport.authenticate('local', { failureRedirect: '/verifyFail', failureFlash: true }),
 app.post('/login', 
-    ((req, res, next) => {
+    (req, res, next) => {
         passport.authenticate('local', (err, user, info) => {
             if(err) return next(err)
             if(info){
@@ -83,9 +83,8 @@ app.post('/login',
                 return res.redirect('/verifyFail')
             } 
             if(user) return next()
-        })
-    
-    })(req,res,next),
+        })(req,res,next)
+    },
     //
     (req, res) => {
     //let user = await searchUser(req.body)
