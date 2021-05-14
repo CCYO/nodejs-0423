@@ -105,13 +105,13 @@ app.get('/next2', (req, res) => {
 
 app.use((err, req, res, next) => {
     if(err){
-        if(err.msg) let err = err.msg
+        if(err.msg) var err = err.msg
         console.log('================================')
         console.log(err)
         console.log('================================')
     }
     req.flash('error', err)
-    return res.json({ redirect: '/verifyFail'})
+    return res.redirect('/verifyFail')
 })
 
 app.listen(process.env.PORT || 8080, () => {
