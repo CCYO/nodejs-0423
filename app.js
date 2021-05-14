@@ -117,7 +117,7 @@ app.use((err, req, res, next) => {
         console.log('================================')
     }
     req.flash('error', err)
-    return res.redirect('/verifyFail')
+    return res.json({ redirect: '/verifyFail'})
 })
 
 app.listen(process.env.PORT || 8080, () => {
