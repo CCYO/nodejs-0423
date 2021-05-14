@@ -73,7 +73,21 @@ app.get('/index1', (req, res) => {
     })
 })
 
-app.post('/login', passport.authenticate('local', { failureRedirect: '/verifyFail', failureFlash: true }),  (req, res) => {
+//app.post('/login', passport.authenticate('local', { failureRedirect: '/verifyFail', failureFlash: true }),
+app.post('/login', 
+    ((req, res, next) => {
+        passport.authenticate('local', (err, user, info) => {
+            if(err) return next(err)
+            if(info){
+                req.flash('error', info.message)
+                return res.redirect('/verifyFail')
+            } 
+            if(user) return next()
+        })
+    
+    })(req,res,next),
+    //
+    (req, res) => {
     //let user = await searchUser(req.body)
     console.log('通過驗證策略')
     console.log('req.user: ', req.user)
