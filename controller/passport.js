@@ -18,6 +18,8 @@ passport.use( new localStrategy({ usernameField: 'email'}, async (email, passwor
         return done(null, user)
     } catch(err){
 */
+console.log('進入 controller/passport.js，開始進行驗證策略')
+let err = new Error('------------TEST----------------')
         return done(`ERR in PASSPORT of Strategy then query : ${err}`, false)
 //    }
 }))
