@@ -105,7 +105,11 @@ app.get('/next2', (req, res) => {
 
 app.use((err, req, res, next) => {
     if(err){
-        if(err.msg) var err = err.msg
+        console.log('有err? ==> ', err)
+        if(err.msg) {
+            console.log('有err.msg? ==> ', err.msg)
+            var err = err.msg
+        }
         console.log('================================')
         console.log(err)
         console.log('================================')
