@@ -95,11 +95,11 @@ app.post('/login',
     if (req.body.k === 'index2') return res.json({ redirect: '/index2'})
 })
 
-app.get('/next1', (req, res) => {
+app.get('/next1', (req, res, next) => {
     next('GGGGGGG------------')
 })
 
-app.get('/next2', (req, res) => {
+app.get('/next2', (req, res, next) => {
     next({ msg: 'GGGGGGG------------'})
 })
 
