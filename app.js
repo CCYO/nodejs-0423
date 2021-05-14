@@ -95,13 +95,22 @@ app.post('/login',
     if (req.body.k === 'index2') return res.json({ redirect: '/index2'})
 })
 
+app.get('/next1', (req, res) => {
+    next('GGGGGGG------------')
+})
+
+app.get('/next2', (req, res) => {
+    next({ msg: 'GGGGGGG------------'})
+})
+
 app.use((err, req, res, next) => {
     if(err){
+        if(err.msg) let err = err.msg
         console.log('================================')
         console.log(err)
         console.log('================================')
     }
-    req.flash('error', '系統錯誤')
+    req.flash('error', err)
     return res.json({ redirect: '/verifyFail'})
 })
 
