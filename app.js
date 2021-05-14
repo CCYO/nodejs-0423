@@ -96,6 +96,16 @@ app.post('/login',
     if (req.body.k === 'index2') return res.json({ redirect: '/index2'})
 })
 
+app.use((err, req, res, next) => {
+    if(err){
+        console.log('================================')
+        console.log(err)
+        console.log('================================')
+    }
+    req.flash('error', '系統錯誤')
+    return res.json({ redirect: '/verifyFail'})
+})
+
 app.listen(process.env.PORT || 8080, () => {
     console.log(`listen.......${process.env.PORT}`)
 })
