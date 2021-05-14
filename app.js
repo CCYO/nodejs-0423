@@ -74,6 +74,7 @@ app.get('/index1', (req, res) => {
 })
 
 //app.post('/login', passport.authenticate('local', { failureRedirect: '/verifyFail', failureFlash: true }),
+/*
 app.post('/login', 
     (req, res, next) => {
         passport.authenticate('local', (err, user, info) => {
@@ -85,7 +86,8 @@ app.post('/login',
             if(user) return next()
         })(req,res,next)
     },
-    //
+*/
+app.post( '/login', passport.authenticate('local', { failureFlash: true, failWithError: true}),
     (req, res) => {
     //let user = await searchUser(req.body)
     console.log('通過驗證策略')
