@@ -102,7 +102,7 @@ app.get('/next1', (req, res, next) => {
 })
 
 app.get('/next2', (req, res, next) => {
-    next({ msg: 'GGGGGGG------------'})
+    next({ msg: 'GGGGGGG------------123'})
 })
 
 app.use((err, req, res, next) => {
