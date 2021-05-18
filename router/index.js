@@ -1,16 +1,18 @@
-const { registerUser, searchUser } = require('../controller/mysql.js')
+const { registerUser } = require('../controller/mysql.js')
 const passport = require('../controller/passport')
 
 let router = require('express').Router()
 
 //首頁
 router.get('/', (req, res) => {
+    console.log('111111111111111111112')
     if(req.session.views){
         req.session.views++
     }else{
         req.session.views = 1
     }
     let expireTime = req.session.cookie.maxAge / 1000
+
     return res.render('index', {
         sessionID: req.sessionID,
         isAuthenticated: req.isAuthenticated(),
@@ -18,7 +20,8 @@ router.get('/', (req, res) => {
         sessionOriginMaxAge: req.session.cookie.originalMaxAge,
         sessionExpireTime: expireTime,
         // 若登入驗證錯誤，顯示錯誤提醒
-        verifyFailure: req.flash('error')
+        verifyFailure: req.flash('error'),
+        registerSuccess: req.flash('registerSuccess')
     })
 })
 
@@ -42,7 +45,14 @@ router.post(
 // 送出註冊
 router.post('/register', async (req, res) => {
     let result = await registerUser(req.body)
-    res.json(result)
+    if(result.affectedRows){
+        console.log('註冊成功')
+        req.flash('registerSuccess', '註冊成功，請重新登入')
+        return res.redirect('/')
+    }
+    console.log('註冊失敗')
+    req.flash('error', result.message)
+    return res.redirect('/')
 })
 
 module.exports = router

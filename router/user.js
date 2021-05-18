@@ -2,6 +2,7 @@ let router = require('express').Router()
 
 // 登入首頁
 router.get('/', (req, res) => {
+    console.log('12345689')
     let expireTime = req.session.cookie.maxAge / 1000
     return res.render('user/index', {
         sessionID: req.sessionID,

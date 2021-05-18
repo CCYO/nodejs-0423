@@ -7,6 +7,8 @@ passport.use( new localStrategy({ usernameField: 'email'}, async (email, passwor
     try {
 	    console.log('進入 passport.js localStragy 開始驗證')
         let {results, fields} = await query(`SELECT * FROM users WHERE email = ?`, email)
+        console.log('results ===> ', results)
+        console.log('fields ===> ', fields)
         let user = results[0]
         if(!user){
             return done(null, false, {message: '信箱錯誤'})

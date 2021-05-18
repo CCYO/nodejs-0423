@@ -36,6 +36,11 @@ app.use(flash())
 // 初始化 passport 設定，如 strategyIns、serializeUser、deserializeUser
 app.use( passport.initialize() )
 
+app.use((req, res, next) => {
+    console.log('app session ===> ', req.session)
+    next()
+})
+
 // 不需要認證的路由
 app.use('/', router)
 
