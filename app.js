@@ -1,25 +1,22 @@
 let express = require('express'),
-    bodyParser = require('body-parser'),
     flash = require('connect-flash'),
     session = require('express-session'),
     redisStore = require('connect-redis')(session)
 
 let redisClient = require('./db/redis'),
     router = require('./router/index.js'),
+    user_router = require('./router/user.js')
+    // 添加 req.isAuthenticated、req.logout 等 passportJS 賦予在 req 上的東西
+    // strategyIns、serializeUser、deserializeUser等自己設定的 passport方法，則需用 initialize 初始化
     passport = require('./controller/passport.js')
-
 
 let app = express()
 
 app.set('view engine', 'ejs')
 
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
-
-app.use((req, res, next) => {
-    console.log('進入 app.js，還沒通過 express-session 中間件，此時 req.session 為\n', req.session)
-    next()
-})
+// express 4.16+ 不推薦使用 body-parse
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
 
 app.use(session({
     secret: 'xxx',
@@ -32,92 +29,30 @@ app.use(session({
     store: new redisStore({ client: redisClient})
 }))
 
+// 會用到 session，所以必須放在session之後
 app.use(flash())
 
-app.use((req, res, next) => {
-    console.log('進入 app.js，通過 express-session 中間件，此時 req.session 為\n', req.session)
-    next()
-})
-
+// 會用到 session，所以必須放在session之後
+// 初始化 passport 設定，如 strategyIns、serializeUser、deserializeUser
 app.use( passport.initialize() )
 
-app.use((req, res, next) => {
-    console.log('進入 app.js，通過 passport-initialize 中間件，此時 req.session 為\n', req.session)
-    console.log('req.user 為\n', req.user)
-    next()
-})
-
+// 不需要認證的路由
 app.use('/', router)
 
+// 調用 passport.deserializeUser
 app.use( passport.session())
 
-app.use((req, res, next) => {
-    console.log('進入 app.js，通過 passport-session 中間件，此時 req.session 為\n', req.session)
-    console.log('req.user 為\n', req.user)
-    next()
-})
+//需要登入身分的路由
+app.use('/user', user_router)
 
-app.get('/index1', (req, res) => {
-    console.log('進入 app.js 的 /，此時 req.session 為\n', req.session)
-    console.log('req.isAuthenticated is', req.isAuthenticated())
-    console.log('req.user 為\n', req.user)
-    let expireTime = req.session.cookie.maxAge / 1000
-    return res.render('index', {
-        sessionID: req.sessionID,
-        isAuthenticated: req.isAuthenticated(),
-        views: req.session.views,
-        sessionOriginMaxAge: req.session.cookie.originalMaxAge,
-        sessionExpireTime: expireTime,
-        id: req.user.id,
-        email: (req.isAuthenticated() ? req.user.email : null),
-    })
-})
-
-//app.post('/login', passport.authenticate('local', { failureRedirect: '/verifyFail', failureFlash: true }),
-/*
-app.post('/login', 
-    (req, res, next) => {
-        passport.authenticate('local', (err, user, info) => {
-            if(err) return next(err)
-            if(info){
-                req.flash('error', info.message)
-                return res.redirect('/verifyFail')
-            } 
-            if(user) return next()
-        })(req,res,next)
-    },
-*/
-app.post( '/login', passport.authenticate('local', { failureFlash: true, failWithError: true}),
-    (req, res) => {
-    //let user = await searchUser(req.body)
-    console.log('通過驗證策略')
-    console.log('req.user: ', req.user)
-    console.log('req.session: ', req.session)
-    if (req.body.k === 'index1') return res.json({ redirect: '/index1'})
-    if (req.body.k === 'index2') return res.json({ redirect: '/index2'})
-})
-
-app.get('/next1', (req, res, next) => {
-    next('GGGGGGG------------')
-})
-
-app.get('/next2', (req, res, next) => {
-    next({ msg: 'GGGGGGG------------123'})
-})
-
+// 處理 next(err)
 app.use((err, req, res, next) => {
     if(err){
-        console.log('有err? ==> ', err)
-        if(err.msg) {
-            console.log('有err.msg? ==> ', err.msg)
-            var err = err.msg
-        }
-        console.log('================================')
-        console.log(err)
-        console.log('================================')
+        console.log('error ===> ', err.message )
+        return res.render('404', {
+            err: err.message
+        })
     }
-    req.flash('error', err)
-    return res.json({ redirect: '/verifyFail'})
 })
 
 app.listen(process.env.PORT || 8080, () => {

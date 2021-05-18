@@ -4,36 +4,34 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>123
+    <title>首頁</title>
     <script
     src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
     crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1>Register Page</h1>
+    <h1>INDEX</h1>
+    <p>HI ~ Your session: <%= sessionID %></p> and 
+    <% if (!isAuthenticated){ %>
+        <p>未登入</p>
+    <% }else{ %>
+        <p>已登入</p>
+    <% } %>
     <p>這是你第 <%= views %> 次進來</p>
     <p>這段session can remain <%= sessionOriginMaxAge %> sec</p>
     <p>還有 <%= sessionExpireTime %> sec</p>
-    <form id="_form">
+    <% if ( verifyFailure.length  ){ %>
+        <script>alert("  <%= verifyFailure  %> ")</script>
+    <% } %>
+    <!--
+        註冊
+        登入
+    -->
+    <form id="_form" action='/login' method='POST'>
         email: <input type="text" name="email">
         password: <input type="text" name="password">
         <input type="submit">
     </form>
-    <script>
-        $(function(){
-            $('#_form').submit( (e) => {
-                e.preventDefault()
-                $.ajax({
-                    method: 'POST',
-                    url: '/register',
-                    data: $('#_form').serialize(),
-                    dataType: 'json'
-                }).then( result => {
-                    console.log(result)
-                })
-            })
-        })
-    </script>
 </body>
 </html>

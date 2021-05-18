@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>123
+    <title>會員首頁</title>123
     <script
     src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
@@ -23,5 +23,10 @@
     <p>這是你第 <%= views %> 次進來</p>
     <p>這段session can remain <%= sessionOriginMaxAge %> sec</p>
     <p>還有 <%= sessionExpireTime %> sec</p>
+    <!--
+        註冊
+        登入
+    -->
+    <a href="/user/logout">登出</a>
 </body>
 </html>

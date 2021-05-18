@@ -1,75 +1,48 @@
 const { registerUser, searchUser } = require('../controller/mysql.js')
+const passport = require('../controller/passport')
 
 let router = require('express').Router()
 
-
-router.get('/index2', (req, res) => {
-    console.log('進入 router/index.js 的 index2，此時 req.session 為\n', req.session)
-    console.log('req.isAuthenticated is', req.isAuthenticated())
-    console.log('req.user 為\n', req.user)
+//首頁
+router.get('/', (req, res) => {
+    if(req.session.views){
+        req.session.views++
+    }else{
+        req.session.views = 1
+    }
     let expireTime = req.session.cookie.maxAge / 1000
-    return res.render('index2', {
+    return res.render('index', {
         sessionID: req.sessionID,
         isAuthenticated: req.isAuthenticated(),
         views: req.session.views,
         sessionOriginMaxAge: req.session.cookie.originalMaxAge,
         sessionExpireTime: expireTime,
-        id: req.user.id,
-        email: (req.isAuthenticated() ? req.user.email : null)
+        // 若登入驗證錯誤，顯示錯誤提醒
+        verifyFailure: req.flash('error')
     })
 })
 
-router.get('/login', (req, res) => {
-    if(req.session.views){
-        console.log('views ++')
-        req.session.views++
-    }else{
-        console.log('views init...')
-        req.session.views = 1
+router.post(
+    '/login',
+    passport.authenticate('local', {
+        // 驗證錯誤，重新導向首頁
+        failureRedirect: '/',
+        // 將 strategyIns 的 verifyCB 傳入的 info，直接套用 req.flash
+        failureFlash: true,
+        // 將 strategyIns 的 verifyCB 傳入的 err，直接套用 next(err)
+        failWithError: true
+    }),
+    // verify success
+    (req, res) => {
+        //let user = await searchUser(req.body)
+        return res.redirect('/user')
     }
-    let expireTime = req.session.cookie.maxAge / 1000
-    console.log(`${req.session.id} coming...`)
-    return res.render('login', {
-        sessionID: req.sessionID,
-        views: req.session.views,
-        sessionExpireTime: expireTime,
-        sessionOriginMaxAge: req.session.cookie.originalMaxAge
-    })
-})
+)
 
-router.get('/register', (req, res) => {
-    if(req.session.views){
-        console.log('views ++')
-        req.session.views++
-    }else{
-        console.log('views init...')
-        req.session.views = 1
-    }
-    let expireTime = req.session.cookie.maxAge / 1000
-    console.log(`${req.session.id} coming...`)
-    res.render('register', {
-        views: req.session.views,
-        sessionExpireTime: expireTime,
-        sessionOriginMaxAge: req.session.cookie.originalMaxAge
-    })
-})
-
-
+// 送出註冊
 router.post('/register', async (req, res) => {
     let result = await registerUser(req.body)
     res.json(result)
 })
-
-router.get('/verifyFail', (req, res) => {
-    console.log('進入 /verifyFail')
-    res.redirect('/cantfind')
-})
-
-router.get('/cantfind', (req, res) => {
-    return res.render('cantfind', {
-        err: req.flash('error')
-    })
-})  
-
 
 module.exports = router

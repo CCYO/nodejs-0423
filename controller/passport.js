@@ -4,9 +4,8 @@ let passport = require('passport'),
 let { query } = require('./mysql.js')
 
 passport.use( new localStrategy({ usernameField: 'email'}, async (email, password, done) => {
-/*
     try {
-	    console.log('進入 controller/passport.js，開始進行驗證策略')
+	    console.log('進入 passport.js localStragy 開始驗證')
         let {results, fields} = await query(`SELECT * FROM users WHERE email = ?`, email)
         let user = results[0]
         if(!user){
@@ -16,12 +15,10 @@ passport.use( new localStrategy({ usernameField: 'email'}, async (email, passwor
             return done(null, false, {message: '密碼錯誤'})
         }
         return done(null, user)
-    } catch(err){
-*/
-console.log('進入 controller/passport.js，開始進行驗證策略')
-let err = new Error('------------TEST----------------')
-        return done(`ERR in PASSPORT of Strategy then query : ${err}`, false)
-//    }
+    } catch(err) {
+        console.log('passport.js localStragy 發生內部錯誤')
+        return done(err, false)
+    }
 }))
 
 passport.serializeUser((user, done) => {
