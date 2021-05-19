@@ -1,24 +1,24 @@
 const { registerUser } = require('../controller/mysql.js')
-const passport = require('../controller/passport')
+const passport = require('../middleware/passport')
+const views = require('../middleware/views.js')
 
 let router = require('express').Router()
 
+router.use(views)
+
 //首頁
 router.get('/', (req, res) => {
-    console.log('111111111111111111112')
-    if(req.session.views){
-        req.session.views++
-    }else{
-        req.session.views = 1
+    // 若已登入，轉到會員首頁
+    if(req.session.passport && req.session.passport.user){
+        req.flash('registerSuccess', '你已登入，現在為你轉到會員首頁')
+        return res.redirect('/user')
     }
-    let expireTime = req.session.cookie.maxAge / 1000
-
     return res.render('index', {
         sessionID: req.sessionID,
         isAuthenticated: req.isAuthenticated(),
         views: req.session.views,
         sessionOriginMaxAge: req.session.cookie.originalMaxAge,
-        sessionExpireTime: expireTime,
+        sessionExpireTime: req.session.cookie.maxAge / 1000,
         // 若登入驗證錯誤，顯示錯誤提醒
         verifyFailure: req.flash('error'),
         registerSuccess: req.flash('registerSuccess')
@@ -44,9 +44,10 @@ router.post(
 
 // 送出註冊
 router.post('/register', async (req, res) => {
+    // 註冊
     let result = await registerUser(req.body)
+    // 若註冊成功
     if(result.affectedRows){
-        console.log('註冊成功')
         req.flash('registerSuccess', '註冊成功，請重新登入')
         return res.redirect('/')
     }

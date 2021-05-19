@@ -8,7 +8,9 @@ let redisClient = require('./db/redis'),
     user_router = require('./router/user.js')
     // 添加 req.isAuthenticated、req.logout 等 passportJS 賦予在 req 上的東西
     // strategyIns、serializeUser、deserializeUser等自己設定的 passport方法，則需用 initialize 初始化
-    passport = require('./controller/passport.js')
+    passport = require('./middleware/passport.js')
+
+
 
 let app = express()
 
@@ -53,7 +55,7 @@ app.use('/user', user_router)
 // 處理 next(err)
 app.use((err, req, res, next) => {
     if(err){
-        console.log('error ===> ', err.message )
+        console.log('error ===> ', err )
         return res.render('404', {
             err: err.message
         })

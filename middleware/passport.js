@@ -1,7 +1,7 @@
 let passport = require('passport'),
     localStrategy = require('passport-local').Strategy
 
-let { query } = require('./mysql.js')
+let { query } = require('../controller/mysql.js')
 
 passport.use( new localStrategy({ usernameField: 'email'}, async (email, password, done) => {
     try {
@@ -39,5 +39,7 @@ passport.deserializeUser( async ({ id, email}, done) => {
         return done(`ERR in PASSPORT of deserialized then query : ${err}`, false)
     }
 })
+
+
 
 module.exports = passport
