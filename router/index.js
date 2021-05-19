@@ -51,7 +51,7 @@ router.post('/register', async (req, res) => {
         req.flash('registerSuccess', '註冊成功，請重新登入')
         return res.redirect('/')
     }
-    console.log('註冊失敗')
+    console.log('註冊失敗, ERR ===> ', result)
     req.flash('error', result.message)
     return res.redirect('/')
 })

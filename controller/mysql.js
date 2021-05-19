@@ -1,3 +1,4 @@
+const { hash, compare } = require('./bcrypt.js')
 const mysqlConnection = require('../db/mysql.js')
 
 const query = (queryStr, ...keywordArr) => {
@@ -11,32 +12,27 @@ const query = (queryStr, ...keywordArr) => {
 
 const registerUser = async (body) => {
     const queryStr = `INSERT INTO users ( email, password ) VALUES ( ?, ? )`
-    const {email, password} = body
+    let {email, password} = body
+    const salt = 'secret'
     try {
-            const { results } = await query( queryStr, email, password)
-            console.log('註冊成功!! ==> ', results)
-            return results
-        }catch(err){
-            console.log('44444444444444444444444444444')
-            console.log(`MYSQL ERR then registerUser: ${err}`)
-            return err
-        }
+        const _password = await hash(password, salt)
+        const { results } = await query( queryStr, email, _password)
+        console.log('註冊成功!! ==> ', results)
+        return results
+    } catch(err) {
+        return err
+    }
 }
 
-
-
-const searchUser = async (body) => {
+const searchUser = async (email, password) => {
     const queryStr = `SELECT * FROM users WHERE email = ?`
-    const {email, password} = body
-    try {
-            let {results, fields} = await query( queryStr, email)
-            let user = results[0]
-            if(!user) return { msg: '找不到該帳號'}
-            if(!(password === user.password)) return {msg: '密碼錯誤'}
-            return user
-        }catch(err){
-            console.log(`MYSQL ERR then searchUSER: ${err}`)
-        }
+    let {results, fields} = await query( queryStr, email)
+    let user = results[0]
+    if(!user) return { msg: '帳號錯誤'}
+    if ( !( await compare(password, user.password) ) ){
+        return {msg: '密碼錯誤'}
+    }
+    return user
 }
 
 

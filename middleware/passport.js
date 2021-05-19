@@ -1,11 +1,17 @@
 let passport = require('passport'),
     localStrategy = require('passport-local').Strategy
 
-let { query } = require('../controller/mysql.js')
+let { query, searchUser } = require('../controller/mysql.js')
 
 passport.use( new localStrategy({ usernameField: 'email'}, async (email, password, done) => {
     try {
-	    console.log('進入 passport.js localStragy 開始驗證')
+        console.log('進入 passport.js localStragy 開始驗證')
+        let user = await searchUser(email)
+        if(user.msg){
+            return done(null, false, {message: user.msg})
+        }
+	    return done(null, user)
+        /*
         let {results, fields} = await query(`SELECT * FROM users WHERE email = ?`, email)
         console.log('results ===> ', results)
         console.log('fields ===> ', fields)
@@ -17,6 +23,7 @@ passport.use( new localStrategy({ usernameField: 'email'}, async (email, passwor
             return done(null, false, {message: '密碼錯誤'})
         }
         return done(null, user)
+        */
     } catch(err) {
         console.log('passport.js localStragy 發生內部錯誤')
         return done(err, false)
