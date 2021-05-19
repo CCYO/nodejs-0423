@@ -6,24 +6,11 @@ let { query, searchUser } = require('../controller/mysql.js')
 passport.use( new localStrategy({ usernameField: 'email'}, async (email, password, done) => {
     try {
         console.log('進入 passport.js localStragy 開始驗證')
-        let user = await searchUser(email)
+        let user = await searchUser(email, password)
         if(user.msg){
             return done(null, false, {message: user.msg})
         }
 	    return done(null, user)
-        /*
-        let {results, fields} = await query(`SELECT * FROM users WHERE email = ?`, email)
-        console.log('results ===> ', results)
-        console.log('fields ===> ', fields)
-        let user = results[0]
-        if(!user){
-            return done(null, false, {message: '信箱錯誤'})
-        }
-        if(!(password === user.password)){
-            return done(null, false, {message: '密碼錯誤'})
-        }
-        return done(null, user)
-        */
     } catch(err) {
         console.log('passport.js localStragy 發生內部錯誤')
         return done(err, false)
@@ -43,7 +30,7 @@ passport.deserializeUser( async ({ id, email}, done) => {
         let user = results[0]
         done(null, user)
     } catch(err){
-        return done(`ERR in PASSPORT of deserialized then query : ${err}`, false)
+        return done(err, false)
     }
 })
 

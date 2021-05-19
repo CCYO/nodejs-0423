@@ -4,25 +4,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>會員首頁</title>123
+    <title>會員首頁</title>
     <script
     src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
     crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1>INDEX</h1>
-    <p>HI ~ Your session: <%= sessionID %></p> and 
-    <% if (!isAuthenticated){ %>
-        <p>未登入</p>
-    <% }else{ %>
-        <p>已登入</p>
-    <% } %>
-    <p>your email <%= email %></p>
-    <p>your SQL id <%= id %></p>
-    <p>這是你第 <%= views %> 次進來</p>
-    <p>這段session can remain <%= sessionOriginMaxAge %> sec</p>
-    <p>還有 <%= sessionExpireTime %> sec</p>
+    <h1>會員登入首頁</h1>
+    <p>你的 SESSION_ID => <%= sessionID %></p>
+    <p>設定上保留 <%= sessionOriginMaxAge %> 秒</p>
+    <p>尚餘 <%= sessionExpireTime %> 秒</p>
+    <p>信箱 => <%= email %></p>
+    <p>SQL_id => <%= id %></p>
+    <p>第 <%= views %> 次來到此站</p>
     <a href="/user/logout">登出</a>
     <% if ( verifyFailure !== 'undefined' && verifyFailure.length  ){ %>
         <script>alert("  <%= verifyFailure  %> ")</script>

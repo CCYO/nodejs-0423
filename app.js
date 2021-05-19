@@ -1,16 +1,16 @@
-let express = require('express'),
+const express = require('express'),
     flash = require('connect-flash'),
     session = require('express-session'),
     redisStore = require('connect-redis')(session)
 
-let redisClient = require('./db/redis'),
-    router = require('./router/index.js'),
+const redisClient = require('./db/redis')
+
+const router = require('./router/index.js'),
     user_router = require('./router/user.js')
     // 添加 req.isAuthenticated、req.logout 等 passportJS 賦予在 req 上的東西
     // strategyIns、serializeUser、deserializeUser等自己設定的 passport方法，則需用 initialize 初始化
-    passport = require('./middleware/passport.js')
 
-
+const    passport = require('./middleware/passport.js')
 
 let app = express()
 

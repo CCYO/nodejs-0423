@@ -1,8 +1,11 @@
-const { registerUser } = require('../controller/mysql.js')
-const passport = require('../middleware/passport')
-const views = require('../middleware/views.js')
+const router = require('express').Router()
 
-let router = require('express').Router()
+const { registerUser } = require('../controller/mysql.js')
+
+const passport = require('../middleware/passport'),
+    views = require('../middleware/views.js')
+
+console.log('+++++++++++++++')
 
 router.use(views)
 
