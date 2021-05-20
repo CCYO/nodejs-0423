@@ -5,8 +5,6 @@ const { registerUser } = require('../controller/mysql.js')
 const passport = require('../middleware/passport'),
     views = require('../middleware/views.js')
 
-console.log('+++++++++++++++')
-
 router.use(views)
 
 //首頁

@@ -9,17 +9,19 @@ const router = require('./router/index.js'),
     user_router = require('./router/user.js')
     // 添加 req.isAuthenticated、req.logout 等 passportJS 賦予在 req 上的東西
     // strategyIns、serializeUser、deserializeUser等自己設定的 passport方法，則需用 initialize 初始化
-
-const    passport = require('./middleware/passport.js')
+    
+const passport = require('./middleware/passport.js')
 
 let app = express()
 
 app.set('view engine', 'ejs')
 
+// 處理 req.body
 // express 4.16+ 不推薦使用 body-parse
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
+// 處理 cookie、session
 app.use(session({
     secret: 'xxx',
     resave: false,
@@ -31,13 +33,16 @@ app.use(session({
     store: new redisStore({ client: redisClient})
 }))
 
+// 使用 session.flash
 // 會用到 session，所以必須放在session之後
 app.use(flash())
 
+// 使用 passport 驗證
 // 會用到 session，所以必須放在session之後
 // 初始化 passport 設定，如 strategyIns、serializeUser、deserializeUser
 app.use( passport.initialize() )
 
+// dev 觀察用
 app.use((req, res, next) => {
     console.log('app session ===> ', req.session)
     next()
@@ -49,7 +54,19 @@ app.use('/', router)
 // 調用 passport.deserializeUser
 app.use( passport.session())
 
-//需要登入身分的路由
+// dev 觀察用
+app.use((req, res, next) => {
+    console.log('app session ===> ', req.session)
+    if(req.isAuthenticated()){
+        var a = '已登入'
+    }else{
+        var a = '未登入'
+    }
+    console.log('登入狀態 ===> ', a)
+    next()
+})
+
+// 需要登入身分的路由
 app.use('/user', user_router)
 
 // 處理 next(err)
@@ -62,6 +79,4 @@ app.use((err, req, res, next) => {
     }
 })
 
-app.listen(process.env.PORT || 8080, () => {
-    console.log(`listen.......${process.env.PORT}`)
-})
+module.exports = app

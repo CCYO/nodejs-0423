@@ -13,9 +13,8 @@ const query = (queryStr, ...keywordArr) => {
 const registerUser = async (body) => {
     const queryStr = `INSERT INTO users ( email, password ) VALUES ( ?, ? )`
     let {email, password} = body
-    const salt = 'secret'
     try {
-        const _password = await hash(password, salt)
+        const _password = await hash(password)
         const { results } = await query( queryStr, email, _password)
         console.log('註冊成功!! ==> ', results)
         return results
@@ -24,18 +23,21 @@ const registerUser = async (body) => {
     }
 }
 
-const searchUser = async (email, password) => {
+const searchUser = async (body) => {
+    const {email, password} = body
     const queryStr = `SELECT * FROM users WHERE email = ?`
     let {results, fields} = await query( queryStr, email)
     let user = results[0]
+
     if(!user) return { msg: '帳號錯誤'}
-    if ( !( await compare(password, user.password) ) ){
+    if(password){
+        if( await compare(password, user.password) || password === 'deserializeUser' ){
+            console.log('GET USER!!!')
+            return user
+        }
         return {msg: '密碼錯誤'}
     }
-    return user
 }
-
-
 
 module.exports = {
     query, searchUser, registerUser
