@@ -23,19 +23,22 @@ const registerUser = async (body) => {
     }
 }
 
-const searchUser = async (body) => {
-    const {email, password} = body
+const searchUser = async (email, password, id) => {
+    if(!password && !id){
+        return {msg: '密碼沒填'}
+    }
     const queryStr = `SELECT * FROM users WHERE email = ?`
     let {results, fields} = await query( queryStr, email)
-    let user = results[0]
-
-    if(!user) return { msg: '帳號錯誤'}
+    if(!user.length) return { msg: '無此信箱'}
+    let user = users[0]
     if(password){
-        if( await compare(password, user.password) || password === 'deserializeUser' ){
+        if( await compare(password, user.password) ){
             console.log('GET USER!!!')
             return user
         }
         return {msg: '密碼錯誤'}
+    }else if( user.id === id ){
+        return user
     }
 }
 

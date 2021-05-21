@@ -1,6 +1,10 @@
 const router = require('express').Router()
 
-const { registerUser } = require('../controller/mysql.js')
+if(process.env.db === 'mongodb'){
+    var { registerUser } = require('../controller/user_mongodb')
+}else if(process.env.db === 'mysql'){
+    var { registerUser } = require('../controller/user_mysql')
+}
 
 const passport = require('../middleware/passport'),
     views = require('../middleware/views.js')
@@ -46,9 +50,14 @@ router.post(
 // 送出註冊
 router.post('/register', async (req, res) => {
     // 註冊
-    let result = await registerUser(req.body)
+    var result = await registerUser(req.body)
     // 若註冊成功
-    if(result.affectedRows){
+    if(process.env.db === 'mysql'){
+        var ok = result.affectedRows
+    }else if(process.env.db === 'mongodb'){
+        var ok = result
+    }
+    if(ok){
         req.flash('registerSuccess', '註冊成功，請重新登入')
         return res.redirect('/')
     }

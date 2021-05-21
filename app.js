@@ -4,6 +4,9 @@ const express = require('express'),
     redisStore = require('connect-redis')(session)
 
 const redisClient = require('./db/redis')
+if(process.env.db === 'mongodb'){
+    require('./db/mongodb')
+}
 
 const router = require('./router/index.js'),
     user_router = require('./router/user.js')
