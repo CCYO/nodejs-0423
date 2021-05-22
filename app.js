@@ -66,7 +66,6 @@ app.use((req, res, next) => {
         var a = '未登入'
     }
     console.log('登入狀態 ===> ', a)
-    next()
 })
 
 // 需要登入身分的路由

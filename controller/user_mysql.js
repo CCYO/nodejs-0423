@@ -10,16 +10,15 @@ const query = (queryStr, ...keywordArr) => {
     })
 }
 
-const registerUser = async (body) => {
+const registerUser = async (email, password) => {
+    const check = await searchUser(email, password)
+    if(check.msg || check) return null
     const queryStr = `INSERT INTO users ( email, password ) VALUES ( ?, ? )`
-    let {email, password} = body
-    try {
-        const _password = await hash(password)
-        const { results } = await query( queryStr, email, _password)
-        console.log('註冊成功!! ==> ', results)
-        return results
-    } catch(err) {
-        return err
+    const { results } = await query( queryStr, email, _password)
+    if(results.affectedRows){
+        const queryStr = `SELECT * FROM users WHERE email = ?`
+        let {results, fields} = await query( queryStr, email)
+        return results[0]
     }
 }
 
@@ -29,8 +28,8 @@ const searchUser = async (email, password, id) => {
     }
     const queryStr = `SELECT * FROM users WHERE email = ?`
     let {results, fields} = await query( queryStr, email)
-    if(!user.length) return { msg: '無此信箱'}
-    let user = users[0]
+    if(!results.length) return { msg: '無此信箱'}
+    let user = results[0]
     if(password){
         if( await compare(password, user.password) ){
             console.log('GET USER!!!')

@@ -30,8 +30,7 @@ router.get('/', (req, res) => {
     })
 })
 
-router.post(
-    '/login',
+router.post( '/login',
     passport.authenticate('local', {
         // 驗證錯誤，重新導向首頁
         failureRedirect: '/',
@@ -48,22 +47,32 @@ router.post(
 )
 
 // 送出註冊
-router.post('/register', async (req, res) => {
-    // 註冊
-    var result = await registerUser(req.body)
-    // 若註冊成功
-    if(process.env.db === 'mysql'){
-        var ok = result.affectedRows
-    }else if(process.env.db === 'mongodb'){
-        var ok = result
-    }
-    if(ok){
-        req.flash('registerSuccess', '註冊成功，請重新登入')
+router.post('/register', async (req, res, next) => {
+    try{
+        let {email, password} = req.body
+        if(!email){
+            req.flash('error', '請填信箱')
+        } else if(!password){
+            req.flash('error', '請填密碼')
+        } else {
+            // 註冊，且若註冊成功
+            if(await registerUser(email, password)){
+                req.flash('registerSuccess', '註冊成功，請重新登入')
+            }else{
+                req.flash('error', '此信箱已註冊')
+            }
+        }
         return res.redirect('/')
+    } catch(err) {
+        next(err)
     }
-    console.log('註冊失敗, ERR ===> ', result)
-    req.flash('error', result.message)
-    return res.redirect('/')
+})
+
+router.use((err, req, res, next) => {
+    if(err){
+        console.log('router index error ===> ', err )
+        next(err)
+    }
 })
 
 module.exports = router
