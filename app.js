@@ -55,10 +55,13 @@ app.use((req, res, next) => {
 app.use('/', router)
 
 // 調用 passport.deserializeUser
+// req.user 會被賦予資料
 app.use( passport.session())
 
 // dev 觀察用
 app.use((req, res, next) => {
+    console.log('app req.body ===>', req.body)
+    console.log('app req.user ===>', req.user)
     console.log('app session ===> ', req.session)
     if(req.isAuthenticated()){
         var a = '已登入'
@@ -66,6 +69,7 @@ app.use((req, res, next) => {
         var a = '未登入'
     }
     console.log('登入狀態 ===> ', a)
+    next()
 })
 
 // 需要登入身分的路由

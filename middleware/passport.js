@@ -14,6 +14,7 @@ passport.use( new localStrategy({ usernameField: 'email'}, async (email, passwor
         if(user.msg){
             return done(null, false, {message: user.msg})
         }
+        console.log('驗證成功')
 	    return done(null, user)
     } catch(err) {
         console.log('passport.js localStragy 發生內部錯誤')
@@ -31,6 +32,7 @@ passport.deserializeUser( async ({ email, id}, done) => {
     console.log('進入 controller/passport.js，開始反序列化')
     try{
         let user = await searchUser(email, null, id)
+        console.log('user ===>' , user)
         if( user.msg ) return done(null, false, {message: user.msg })
         return done(null, user)
     } catch(err){

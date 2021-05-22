@@ -12,7 +12,7 @@ const query = (queryStr, ...keywordArr) => {
 
 const registerUser = async (email, password) => {
     const check = await searchUser(email, password)
-    if(check.msg || check) return null
+    if(check.id) return null
     const queryStr = `INSERT INTO users ( email, password ) VALUES ( ?, ? )`
     const { results } = await query( queryStr, email, _password)
     if(results.affectedRows){

@@ -42,6 +42,7 @@ router.post( '/login',
     // verify success
     (req, res) => {
         //let user = await searchUser(req.body)
+        console.log('okkkkkkkkkkkkkkkkkkkkkkk')
         return res.redirect('/user')
     }
 )
@@ -64,13 +65,6 @@ router.post('/register', async (req, res, next) => {
         }
         return res.redirect('/')
     } catch(err) {
-        next(err)
-    }
-})
-
-router.use((err, req, res, next) => {
-    if(err){
-        console.log('router index error ===> ', err )
         next(err)
     }
 })

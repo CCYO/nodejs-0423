@@ -19,6 +19,12 @@
     <p>SQL_id => <%= id %></p>
     <p>第 <%= views %> 次來到此站</p>
     <a href="/user/logout">登出</a>
+    <form action="/user/delete" method='POST'>
+        【刪除此帳號】<br>
+        信箱：<input type="text" name='email'><br>
+        密碼：<input type="text" name='password'>
+        <input type="submit">
+    </form>
     <% if ( verifyFailure !== 'undefined' && verifyFailure.length  ){ %>
         <script>alert("  <%= verifyFailure  %> ")</script>
     <% } else if ( registerSuccess !== 'undefined' && registerSuccess.length  ){ %>
